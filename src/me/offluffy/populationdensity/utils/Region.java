@@ -142,6 +142,8 @@ public class Region {
 		//if region post building is disabled, don't do anything
 		if(!ConfigData.buildNamedPosts && !ConfigData.buildWildPosts)
 			return;
+		if ((getName() == null && !ConfigData.buildWildPosts) || (getName() != null && !ConfigData.buildNamedPosts))
+			return;
 		
 		//find the center
 		Location regionCenter = getCenter();
@@ -231,7 +233,6 @@ public class Region {
 		block.setType(Material.WALL_SIGN);
 		block.setData(signData.getData());
 
-		Log.severe("State/Class/Name: " + block.getState().getClass().getName());
 		org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
 		
 		sign.setLine(0, "E");
