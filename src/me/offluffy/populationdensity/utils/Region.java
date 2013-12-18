@@ -230,9 +230,8 @@ public class Region {
 		org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 		signData.setFacingDirection(BlockFace.NORTH);
 		
-		block.setType(Material.WALL_SIGN);
-		block.setData(signData.getData());
-
+		block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
+		
 		org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
 		
 		sign.setLine(0, "E");
@@ -271,8 +270,7 @@ public class Region {
 		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 		signData.setFacingDirection(BlockFace.WEST);
 
-		block.setType(Material.WALL_SIGN);
-		block.setData(signData.getData());
+		block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
@@ -289,8 +287,7 @@ public class Region {
 			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			signData.setFacingDirection(BlockFace.WEST);
 
-			block.setType(Material.WALL_SIGN);
-			block.setData(signData.getData());
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -312,8 +309,7 @@ public class Region {
 		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 		signData.setFacingDirection(BlockFace.EAST);
 
-		block.setType(Material.WALL_SIGN);
-		block.setData(signData.getData());
+		block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
@@ -329,8 +325,7 @@ public class Region {
 			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			signData.setFacingDirection(BlockFace.EAST);
 
-			block.setType(Material.WALL_SIGN);
-			block.setData(signData.getData());
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -352,8 +347,7 @@ public class Region {
 		signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 		signData.setFacingDirection(BlockFace.SOUTH);
 
-		block.setType(Material.WALL_SIGN);
-		block.setData(signData.getData());
+		block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 		
 		sign = (org.bukkit.block.Sign)block.getState();
 		
@@ -370,8 +364,7 @@ public class Region {
 			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			signData.setFacingDirection(BlockFace.SOUTH);
 
-			block.setType(Material.WALL_SIGN);
-			block.setData(signData.getData());
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -390,8 +383,7 @@ public class Region {
 			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			signData.setFacingDirection(BlockFace.NORTH);
 
-			block.setType(Material.WALL_SIGN);
-			block.setData(signData.getData());
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 			
 			sign = (org.bukkit.block.Sign)block.getState();
 			
@@ -429,8 +421,7 @@ public class Region {
 				signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 				signData.setFacingDirection(face);
 
-				block.setType(Material.WALL_SIGN);
-				block.setData(signData.getData());
+				block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 				
 				sign = (org.bukkit.block.Sign)block.getState();
 				
