@@ -23,7 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
 
 public class Region {
 	private int x, z;
@@ -213,7 +212,9 @@ public class Region {
 		if(regionName != null) {		
 			regionName = Lib.capitalize(regionName);
 			Block block = ConfigData.managedWorld.getBlockAt(x, y + 4, z);
-			block.setTypeIdAndData(Material.SIGN_POST.getId(), (byte)0, false);
+			org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
+			signData.setFacingDirection(BlockFace.NORTH);
+			block.setTypeIdAndData(Material.SIGN_POST.getId(), signData.getData(), false);
 			org.bukkit.block.Sign sign = (org.bukkit.block.Sign)block.getState();
 			sign.setLine(1, "Welcome to");
 			sign.setLine(2, "\u00A71" + regionName);
@@ -247,10 +248,9 @@ public class Region {
 			signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			signData.setFacingDirection(BlockFace.NORTH);
 
-			block.setType(Material.WALL_SIGN);
-			block.setData(signData.getData());
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 			
-			sign = (Sign)block.getState();
+			sign = (org.bukkit.block.Sign)block.getState();
 			
 			sign.setLine(0, "Visit the City:");
 			sign.setLine(1, "/CityRegion");
