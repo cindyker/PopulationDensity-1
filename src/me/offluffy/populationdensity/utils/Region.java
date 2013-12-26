@@ -1,15 +1,15 @@
 package me.offluffy.populationdensity.utils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 import me.offluffy.populationdensity.PopulationDensity;
 import me.offluffy.populationdensity.tasks.ScanRegionTask;
@@ -31,17 +31,6 @@ public class Region {
 	public static Region openRegion;
 	public static Region nextRegion;
 	public static int regionCount;
-
-	/**
-	 * Constructor; Initializes a new Region object with the given coordinates
-	 * @param xCoord The X coordinate of the region
-	 * @param zCoord the Z coordinate of the region
-	 */
-	public Region (int xCoord, int zCoord) {
-		x = xCoord;
-		z = zCoord;
-		name = null;
-	}
 	
 	private enum Direction {
 		DOWN, LEFT, UP, RIGHT;
@@ -56,9 +45,27 @@ public class Region {
 				return Direction.DOWN;
 		}
 	}
+
+	/**
+	 * Constructor; Initializes a new Region object with the given coordinates
+	 * @param xCoord The X coordinate of the region
+	 * @param zCoord the Z coordinate of the region
+	 */
+	public Region (int xCoord, int zCoord) {
+		x = xCoord;
+		z = zCoord;
+		name = null;
+		// Attempt to fetch region's name from file, stays null if file doesn't exist
+		try {
+			File file = new File(ConfigData.regionDataFolderPath + File.separator + toString());
+			Scanner in = new Scanner(file);
+			name = in.nextLine();
+			in.close();
+		} catch(Exception e) {}
+	}
 	
 	/**
-	 * Constructor; Converts a string representing region coordinates to a proper region object
+	 * Constructor; Converts a string representing Region to a proper Region object
 	 * @param string The string representing the region coordinates
 	 */
 	public Region(String string) {
@@ -70,10 +77,17 @@ public class Region {
 	    x = Integer.parseInt(xString);
 	    z = Integer.parseInt(zString);
 	    name = null;
+		// Attempt to fetch region's name from file, stays null if file doesn't exist
+		try {
+			File file = new File(ConfigData.regionDataFolderPath + File.separator + x + " " + z);
+			Scanner in = new Scanner(file);
+			name = in.nextLine();
+			in.close();
+		} catch(Exception e) {}
 	}
 	
 	/**
-	 * Given a location, returns the coordinates of the region containing that location
+	 * Given a location, returns the Region containing that location
 	 * @param location The location to find a region
 	 * @return A Region object associated with the found region or null if location is not in the managed world
 	 */
@@ -229,7 +243,7 @@ public class Region {
 		Block block = ConfigData.managedWorld.getBlockAt(x, y + 2, z - 1);
 		
 		org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-		signData.setFacingDirection(BlockFace.NORTH);
+		signData.setFacingDirection(BlockFace.SOUTH);
 		
 		block.setTypeIdAndData(Material.WALL_SIGN.getId(), signData.getData(), false);
 		
@@ -460,10 +474,31 @@ public class Region {
 			File oldRegionNameFile = new File(ConfigData.regionDataFolderPath + File.separator + oldRegionName);
 			oldRegionNameFile.delete();
 		}
-
+		
 		//"create" the region by saving necessary data to disk
 		//(region names to coordinates mappings aren't kept in memory because they're less often needed, and this way we keep it simple) 
-		BufferedWriter outStream = null;
+		PrintWriter out = null;
+		try {
+			// Output coordinates file with region name
+			File nameFile = new File(ConfigData.regionDataFolderPath + File.separator + name);
+			out = new PrintWriter(nameFile);
+			out.print(toString());
+			out.close();
+			
+			// Output name file with coordinates
+			File coordFile = new File(ConfigData.regionDataFolderPath + File.separator + toString());
+			out = new PrintWriter(coordFile);
+			out.print(name);
+			out.close();
+		} catch(Exception e) {
+			//in case of any problem, log the details
+			Log.warn("Unexpected Exception: " + e.getMessage());
+		}
+		try {
+			out.close();
+		} catch(Exception e){}
+
+		/*BufferedWriter outStream = null;
 		try {
 			//coordinates file contains the region's name
 			File regionNameFile = new File(ConfigData.regionDataFolderPath + File.separator + name);
@@ -486,7 +521,7 @@ public class Region {
 		try {
 			if(outStream != null)
 				outStream.close();		
-		} catch(IOException exception) {}
+		} catch(IOException exception) {}*/
 	}
 	
 	/**
@@ -566,16 +601,16 @@ public class Region {
 	
 	/**
 	 * Goes to disk to get the name of a region, given its coordinates
-	 * @param coordinates Coordinates of the region to search for
+	 * @param region Coordinates of the region to search for
 	 * @return The name of the region which exists at the given coordinates
 	 */
-	public static String getRegionName(Region coordinates) {
+	public static String getRegionName(Region region) {
 		File regionCoordinatesFile;
 		
 		BufferedReader inStream = null;
 		String regionName = null;
 		try {
-			regionCoordinatesFile = new File(ConfigData.regionDataFolderPath + File.separator + coordinates.toString());			
+			regionCoordinatesFile = new File(ConfigData.regionDataFolderPath + File.separator + region.toString());			
 			inStream = new BufferedReader(new FileReader(regionCoordinatesFile));
 			
 			//only one line in the file, the region name
@@ -602,7 +637,7 @@ public class Region {
 	 * @param openNewRegions Whether to close the current region and open the next suitable one
 	 */
 	@SuppressWarnings("deprecation")
-	private static void scanRegion(Region region, boolean openNewRegions) {						
+	private static void scanRegion(Region region, boolean openNewRegions) {					
 		Log.log("Examining available resources in region \"" + region.toString() + "\"...");						
 		
 		Location regionCenter = region.getCenter();

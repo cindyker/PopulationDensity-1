@@ -103,7 +103,7 @@ public class ScanRegionTask implements Runnable {
 			//if it's not a pass-through block
 			if(!isPassThrough(mat)) {
 				//if it's a valuable resource, count it
-				if(mat == Material.LOG) woodCount++;
+				if(mat == Material.LOG || mat == Material.LOG_2) woodCount++;
 				else if (mat.equals(Material.COAL_ORE)) coalCount++;
 				else if (mat.equals(Material.IRON_ORE)) ironCount++;
 				else if (mat.equals(Material.GOLD_ORE)) goldCount++;
