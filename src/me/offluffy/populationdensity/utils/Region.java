@@ -651,6 +651,7 @@ public class Region {
 				
 		ChunkSnapshot [][] snapshots = new ChunkSnapshot[greaterBoundaryChunk.getX() - lesserBoundaryChunk.getX() + 1][greaterBoundaryChunk.getZ() - lesserBoundaryChunk.getZ() + 1];
 		boolean snapshotIncomplete;
+		int scans = 0;
 		do {
 			snapshotIncomplete = false;
 			for(int x = 0; x < snapshots.length; x++) {
@@ -670,7 +671,7 @@ public class Region {
 						}
 					}
 					//otherwise, plan to repeat this process again after sleeping a bit
-					if(!foundNonAir)
+					if(!foundNonAir && !(scans > 2))
 						snapshotIncomplete = true;
 				}
 			}
@@ -678,6 +679,7 @@ public class Region {
 			//if at least one snapshot was all air, sleep a second to let the chunk loader/generator
 			//catch up, and then try again
 			if(snapshotIncomplete) {
+				scans++;
 				try  {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) { } 				
