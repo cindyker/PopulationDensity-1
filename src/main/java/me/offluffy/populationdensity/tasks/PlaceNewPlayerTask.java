@@ -15,26 +15,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package me.offluffy.populationdensity.tasks;
 
 import me.offluffy.populationdensity.utils.PlayerHelper;
 import me.offluffy.populationdensity.utils.Region;
-
 import org.bukkit.entity.Player;
 
 //created during new player login to teleport that player to his home region after a short delay
-public class PlaceNewPlayerTask implements Runnable {	
-	private Player player;
-	private Region region;
-	
-	public PlaceNewPlayerTask(Player player, Region region) {
-		this.player = player;
-		this.region = region;
-	}
-	
-	@Override
-	public void run() {
-		PlayerHelper.teleportPlayer(player, region, true);
-	}
+public class PlaceNewPlayerTask implements Runnable {
+    private Player player;
+    private Region region;
+
+    public PlaceNewPlayerTask(Player player, Region region) {
+        this.player = player;
+        this.region = region;
+    }
+
+    @Override
+    public void run() {
+        PlayerHelper.teleportPlayer(player, region, true);
+    }
 }

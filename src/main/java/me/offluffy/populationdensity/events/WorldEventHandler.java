@@ -22,7 +22,6 @@ import me.offluffy.populationdensity.PopulationDensity;
 import me.offluffy.populationdensity.tasks.AddRegionPostTask;
 import me.offluffy.populationdensity.utils.ConfigData;
 import me.offluffy.populationdensity.utils.Region;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -30,39 +29,39 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 
 public class WorldEventHandler implements Listener {
-	//when a chunk loads, generate a region post in that chunk if necessary
-	@EventHandler(ignoreCancelled = true)
-	public void onChunkLoad(ChunkLoadEvent chunkLoadEvent) {		
-		Chunk chunk = chunkLoadEvent.getChunk();
-		
-		//nothing to do in worlds other than the managed world
-		if(chunk.getWorld() != ConfigData.managedWorld)
-			return;
-		
-		//find the boundaries of the chunk
-		Location lesserCorner = chunk.getBlock(0, 0, 0).getLocation();
-		Location greaterCorner = chunk.getBlock(15, 0, 15).getLocation();
-		
-		//find the center of this chunk's region
-		Region region = Region.fromLocation(lesserCorner);		
-		Location regionCenter = region.getCenter();
-		
-		//if the chunk contains the region center
-		if(hasCenter(regionCenter, lesserCorner, greaterCorner)) {
-			//create a task to build the post after 10 seconds
-			AddRegionPostTask task = new AddRegionPostTask(region, false);
-			
-			//run it in a separate thread		
-			PopulationDensity.inst.getServer().getScheduler().scheduleSyncDelayedTask(PopulationDensity.inst, task, 20L * 10);			
-		}
-	}
-	
-	private boolean hasCenter(Location regionCenter, Location lesserCorner, Location greaterCorner) {
-		return (
-			regionCenter.getBlockX() >= lesserCorner.getBlockX() &&
-			regionCenter.getBlockX() <= greaterCorner.getBlockX() &&
-			regionCenter.getBlockZ() >= lesserCorner.getBlockZ() &&
-			regionCenter.getBlockZ() <= greaterCorner.getBlockZ()
-		);
-	}
+    //when a chunk loads, generate a region post in that chunk if necessary
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkLoad(ChunkLoadEvent chunkLoadEvent) {
+        Chunk chunk = chunkLoadEvent.getChunk();
+
+        //nothing to do in worlds other than the managed world
+        if (chunk.getWorld() != ConfigData.managedWorld)
+            return;
+
+        //find the boundaries of the chunk
+        Location lesserCorner = chunk.getBlock(0, 0, 0).getLocation();
+        Location greaterCorner = chunk.getBlock(15, 0, 15).getLocation();
+
+        //find the center of this chunk's region
+        Region region = Region.fromLocation(lesserCorner);
+        Location regionCenter = region.getCenter();
+
+        //if the chunk contains the region center
+        if (hasCenter(regionCenter, lesserCorner, greaterCorner)) {
+            //create a task to build the post after 10 seconds
+            AddRegionPostTask task = new AddRegionPostTask(region, false);
+
+            //run it in a separate thread
+            PopulationDensity.inst.getServer().getScheduler().scheduleSyncDelayedTask(PopulationDensity.inst, task, 20L * 10);
+        }
+    }
+
+    private boolean hasCenter(Location regionCenter, Location lesserCorner, Location greaterCorner) {
+        return (
+                regionCenter.getBlockX() >= lesserCorner.getBlockX() &&
+                        regionCenter.getBlockX() <= greaterCorner.getBlockX() &&
+                        regionCenter.getBlockZ() >= lesserCorner.getBlockZ() &&
+                        regionCenter.getBlockZ() <= greaterCorner.getBlockZ()
+        );
+    }
 }
