@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.offluffy</groupId>
     <artifactId>populationdensity</artifactId>
-    <version>3.8.3-SNAPSHOT</version>
+    <version>3.9-SNAPSHOT</version>
     <name>PopulationDensity</name>
     <build>
         <finalName>${project.name}-${project.version}</finalName>

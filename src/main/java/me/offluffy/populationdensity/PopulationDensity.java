@@ -21,6 +21,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PopulationDensity extends JavaPlugin {
     public final static int REGION_SIZE = 400;
@@ -30,6 +32,8 @@ public class PopulationDensity extends JavaPlugin {
     public static Permission perms;
     public static Economy econ;
     public static PluginManager pm;
+
+    private final Pattern versionPattern = Pattern.compile("((\\d+\\.?){3})(\\-SNAPSHOT)?(\\-local\\-(\\d{8}\\.\\d{6})|\\-(\\d+))?");
 
     @Override
     public void onEnable() {
@@ -69,6 +73,34 @@ public class PopulationDensity extends JavaPlugin {
         // Scan all loaded chunks for entities and compare them to the
         // specified limites in the config.yml. Remove excessive entities
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntityScanTask(), 20L, ConfigData.entityScanHours * 60 * 60 * 20L);
+
+        try {
+            final Metrics m = new Metrics(this);
+            Matcher matcher = versionPattern.matcher(this.getDescription().getVersion());
+            if (matcher.matches()) {
+                // 1 = base version
+                // 3 = -SNAPSHOT
+                // 6 = build #
+                String versionMinusBuild = (matcher.group(1) == null) ? "Unknown" : matcher.group(1);
+                String build = (matcher.group(6) == null) ? "local build" : matcher.group(6);
+                if (matcher.group(3) == null) build = "release";
+                Metrics.Graph g = m.createGraph("Version"); // get our custom version graph
+                g.addPlotter(
+                        new Metrics.Plotter(versionMinusBuild + "~=~" + build) {
+                            @Override
+                            public int getValue() {
+                                return 1; // this value doesn't matter
+                            }
+                        }
+                ); // add the donut graph with major version inside and build outside
+                m.addGraph(g); // add the graph
+            }
+            if (!m.start())
+                getLogger().info("You have Metrics off! I like to keep accurate usage statistics, but okay. :(");
+            else getLogger().info("Metrics enabled. Thank you!");
+        } catch (Exception ignore) {
+            getLogger().warning("Could not start Metrics!");
+        }
     }
 
     private boolean setupPermissions() {

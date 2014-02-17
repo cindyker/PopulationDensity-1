@@ -1,9 +1,8 @@
 name: PopulationDensity
-version: 3.9
-author: bigscary
-authors: [OffLuffy]
-
 main: me.offluffy.populationdensity.PopulationDensity
+version: ${pluginversion}
+description: Spreads out new players to reduce tedious server joins.
+authors: [jkcclemens, OffLuffy, bigscary]
 depend: [Vault]
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft, GriefPrevention, WorldGuard]
 
@@ -64,7 +63,7 @@ commands:
     description: Sets the login priority for a player.
     usage: /LoginPriority <player name> <priority, 0 - 100>
     permission: populationdensity.setloginpriority
-    
+
 permissions:
   populationdensity.*:
     description: Grants all administrative privileges.
