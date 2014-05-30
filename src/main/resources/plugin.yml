@@ -2,7 +2,7 @@ name: PopulationDensity
 main: me.offluffy.populationdensity.PopulationDensity
 version: ${pluginversion}
 description: Spreads out new players to reduce tedious server joins.
-authors: [jkcclemens, OffLuffy, bigscary]
+authors: [jkcclemens, OffLuffy, bigscary, cindy_k]
 depend: [Vault]
 softdepend: [Multiverse-Core, My Worlds, Transporter, MystCraft, GriefPrevention, WorldGuard]
 

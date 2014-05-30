@@ -311,6 +311,14 @@ public class Region {
                 mat.equals(Material.WALL_SIGN) ||
                 mat.equals(Material.LEAVES) ||
                 mat.equals(Material.LOG) ||
+                mat.equals(Material.STONE) ||
+                mat.equals(Material.SAND) ||
+                mat.equals(Material.GRAVEL) ||
+                mat.equals(Material.SANDSTONE) ||
+                mat.equals(Material.ICE) ||
+                mat.equals(Material.PACKED_ICE) ||
+                mat.equals(Material.CLAY) ||
+                mat.equals(Material.HARD_CLAY) ||
                 mat.equals(Material.GLOWSTONE));
     }
 
@@ -371,7 +379,7 @@ public class Region {
         Location regionCenter = getCenter();
         int x = regionCenter.getBlockX();
         int z = regionCenter.getBlockZ();
-        int y;
+        int y = ConfigData.minimumRegionPostY;
 
         //make sure data is loaded for that area, because we're about to request data about specific blocks there
         Lib.loadChunk(x, z);
@@ -384,11 +392,11 @@ public class Region {
         do {
             tryAgain = false;
             //find the highest block.  could be the surface, a tree, some grass...
-            y = ConfigData.managedWorld.getHighestBlockYAt(x, z) + 1;
+           // y = ConfigData.managedWorld.getHighestBlockYAt(x, z) + 1;
             //posts fall through trees, snow, and any existing post looking for the ground
             Material blockType;
             do {
-                blockType = ConfigData.managedWorld.getBlockAt(x, --y, z).getType();
+                blockType = ConfigData.managedWorld.getBlockAt(x, ++y, z).getType();
             } while (y > 2 && canFall(blockType));
             //if final y value is extremely small, it's probably wrong
             if (y < 5 && retriesLeft-- > 0) {
@@ -407,6 +415,10 @@ public class Region {
                 for (int y1 = y + 1; y1 <= y + 15; y1++)
                     if (Lib.compareMats(ConfigData.managedWorld.getBlockAt(x1, y1, z1).getType(), Material.SIGN_POST, Material.SIGN, Material.WALL_SIGN))
                         ConfigData.managedWorld.getBlockAt(x1, y1, z1).setType(Material.AIR);
+
+        //ToDo: Add BedRock Cover Right here!!
+
+
         //clear above it - sometimes this shears trees in half (doh!)
         for (int x1 = x - 2; x1 <= x + 2; x1++)
             for (int z1 = z - 2; z1 <= z + 2; z1++)

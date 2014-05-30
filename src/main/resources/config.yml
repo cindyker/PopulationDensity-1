@@ -2,7 +2,7 @@ Worlds:
   ManagedWorld: world
   CityWorld: flat
 Spawning:
-  NewPlayersSpawnInHomeRegion: true
+  NewPlayersSpawnInHomeRegion: false
   RespawnInHomeRegion: true
 Teleporting:
   AllowTeleportation: true
@@ -23,7 +23,7 @@ ChunkLimits:
   MaximumDropsPerChunk: 25
 Queueing:
   MaxIdleMinutes: 10
-  LoginQueueEnabled: true
+  LoginQueueEnabled: false
   MinimumPlayersOnlineForIdleBoot: 5
   ReservedSlotsForAdministrators: 1
   LoginQueueMessage: '%queuePosition% of %queueLength% in queue. Your queue position will reset in 3 minutes'
@@ -37,7 +37,8 @@ Misc:
 Regions:
   BuildNamedPosts: true
   BuildWildrenessPosts: true
-  MinimumRegionPostY: 62
+  MaximumRegionPostY: 100
+  MinimumRegionPostY: 50
   PostProtectionRadius: 10
   CustomSigns:
     Main:
